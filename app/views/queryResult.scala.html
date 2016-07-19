@@ -1,0 +1,29 @@
+@(queryResult: models.QueryResult)
+
+
+@main("Query Result") {
+<p>Result for @queryResult.country</p>
+<ul>
+@for(airport <- queryResult.airports) {
+    <li>
+        @airport._1.name
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>length</th>
+                <th>width</th>
+                <th>surface</th>
+            </tr>
+            @for(runway <- airport._2) {
+            <tr>
+                <td>@runway.id</td>
+                <td>@runway.length_ft</td>
+                <td>@runway.width_ft</td>
+                <td>@runway.surface</td>
+            </tr>
+            }
+        </table>
+    </li>
+}
+</ul>
+}
