@@ -84,13 +84,16 @@ class HomeController @Inject() (val messagesApi: MessagesApi, actorSystem: Actor
     val airportRefs = airports.map(_.id)
     val filtered = iterator.filterResult(runway => airportRefs.contains(runway.airport_ref))
     val airportMap = scala.collection.mutable.Map[Long, List[Runway]]()
-    val runways = filtered map { result =>
-      result.get
-    } toList
+    filtered foreach { result =>
+      airportMap.contains(result.get.airport_ref) match {
+        case true => airportMap(result.get.airport_ref) = airportMap(result.get.airport_ref) ::: List(result.get)
+        case false => airportMap(result.get.airport_ref) = List(result.get)
+      }
+    }
     // TODO: optimize by using list buffer and removing as assigned or store in map
     var result = List[(Airport, List[Runway])]()
     airports.foreach { airport =>
-      result :::= List((airport, runways.filter(_.airport_ref == airport.id)))
+      result :::= List((airport, airportMap.getOrElse(airport.id, List())))
     }
     result
   }
