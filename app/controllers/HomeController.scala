@@ -38,7 +38,6 @@ class HomeController @Inject() (val messagesApi: MessagesApi, actorSystem: Actor
   }
 
   def report = Action.async {
-    // define futures first so for comprehension runs async
     for {
       report <- LunatechService.generateReport
     } yield Ok(views.html.report(report))
