@@ -98,6 +98,7 @@ object LunatechService extends CSVParser {
     val countryAirports = scala.collection.mutable.Map[String, Int]()
     val countryRunway = scala.collection.mutable.Map[String, Set[String]]()
 
+    // define futures here so for comprehension is async
     val futureAirportByCountry = Future {
       airportByCountry
     }
