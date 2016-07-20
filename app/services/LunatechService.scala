@@ -18,14 +18,13 @@ trait CSVParser {
         || c.name.toUpperCase == country).mapResult(_.code)
     filtered.hasNext match {
       case true => Right(filtered.next.get)
-      case _ => {
+      case _ =>
         val iterator2 = rawData.asCsvReader[Country](',', header = true)
         val fuzzy = iterator2.filterResult(_.name.toUpperCase.startsWith(country)).mapResult(_.code)
         fuzzy.hasNext match {
           case true => Right(fuzzy.next.get)
           case false => Left("country not found")
         }
-      }
     }
   }
 

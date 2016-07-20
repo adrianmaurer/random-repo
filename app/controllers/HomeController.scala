@@ -33,7 +33,6 @@ class HomeController @Inject() (val messagesApi: MessagesApi, actorSystem: Actor
       formWithErrors => BadRequest(views.html.index(formWithErrors)),
       queryData => {
         // TODO: create pipeline aggregator using actors
-        // TODO: stream csv files and short circuit for country
         Ok(views.html.queryResult(LunatechService.queryAirport(queryData.country)))
       })
   }
