@@ -13,10 +13,19 @@ trait CSVParser {
   def getCountry(country: String): Either[String, String] = {
     val rawData: java.net.URL = getClass.getResource("/resources/countries.csv")
     val iterator = rawData.asCsvReader[Country](',', header = true)
-    val filtered = iterator.filterResult(_.code == country).mapResult(_.code)
+    val filtered = iterator.filterResult(
+      c => c.code == country
+        || c.name.toUpperCase == country).mapResult(_.code)
     filtered.hasNext match {
       case true => Right(filtered.next.get)
-      case _ => Left("country not found")
+      case _ => {
+        val iterator2 = rawData.asCsvReader[Country](',', header = true)
+        val fuzzy = iterator2.filterResult(_.name.toUpperCase.startsWith(country)).mapResult(_.code)
+        fuzzy.hasNext match {
+          case true => Right(fuzzy.next.get)
+          case false => Left("country not found")
+        }
+      }
     }
   }
 
@@ -118,7 +127,6 @@ object LunatechService extends CSVParser {
           runways.getOrElse(airport.id, List()).map(_.surface)
         }
         countryRunway(country.get.code) = surfaces.toSet
-        //        Logger.debug("iteration")
       }
       val sortedCountryAirports = countryAirports.toList sortBy(- _._2)
       // because I know there are more than 20 I can slice

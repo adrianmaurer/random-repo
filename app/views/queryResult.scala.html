@@ -3,6 +3,9 @@
 
 @main("Query Result") {
 <p>Result for @queryResult.country</p>
+@if(queryResult.airports.size == 0) {
+<p>No results</p>
+}
 <ul>
 @for(airport <- queryResult.airports) {
     <li>
