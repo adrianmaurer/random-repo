@@ -1,0 +1,47 @@
+@(report: models.ReportResult)
+
+@main("Report Result") {
+<h1>Report</h1>
+<h2>Top 10 countries with most airports</h2>
+<table>
+    <tr>
+        <th>Country</th>
+        <th># of airports</th>
+    </tr>
+
+    @for((country, count) <- report.topAirports) {
+    <tr>
+        <td>@country</td>
+        <td>@count</td>
+    </tr>
+    }
+</table>
+<h2>Bottom 10 countries with most airports</h2>
+<table>
+    <tr>
+        <th>Country</th>
+        <th># of airports</th>
+    </tr>
+
+    @for((country, count) <- report.bottomAirports) {
+    <tr>
+        <td>@country</td>
+        <td>@count</td>
+    </tr>
+    }
+</table>
+<h2>Type of runways per country</h2>
+<table>
+    <tr>
+        <th>Country</th>
+        <th>Runways types</th>
+    </tr>
+
+    @for((country, runways) <- report.runways) {
+    <tr>
+        <td>@country</td>
+        <td>@runways.mkString(", ")</td>
+    </tr>
+    }
+</table>
+}
